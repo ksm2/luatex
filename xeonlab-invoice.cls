@@ -20,7 +20,6 @@
 
 %% PACKAGES
 %%===============================================
-\RequirePackage{rechnung}
 \RequirePackage{xeonlab-utilities}
 \RequirePackage{fontspec}
 \RequirePackage{textcomp} %Eurosymbol
@@ -126,10 +125,6 @@
 		\end{textblock*}
 	\fi
 	\opening{Sehr geehrte Damen und Herren,}
-	
-	Bitte überweisen Sie den folgenden Rechnungsbeitrag bis zum \readinvoice[due] auf das unten angegebene Konto.
-	
-	\Euro
 }
 
 \AtEndDocument{
