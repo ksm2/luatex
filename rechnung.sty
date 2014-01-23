@@ -1,0 +1,221 @@
+%%
+%% This is file `rechnung.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% rechnung.dtx  (with options: `package')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from rechnung.sty.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file rechnung.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%% File: rechnung.dtx Copyright (C) 1998 M G Berberich
+%% berberic@fmi.uni-passau.de
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{rechnung}
+          [1998/11/14 v1.00 BMG Rechnungs Style]
+
+\newcount\@RCHcnt \newcount\@RCHsum \newcount\@RCHtmp
+\newcount\@RCHmwst \newcount\@RCHmwsti \newcount\@RCHmwstii
+\newif\if@RCHerm
+\newdimen\@RCHwdt
+\newcommand*\@RCHstsi{16}
+\newcommand*\@RCHstsii{7}
+\newcommand*\@waehrung{D\kern-0.05em M}
+\newcommand*\Steuersatz[2]{\def\@RCHstsi{#1}\def\@RCHstsii{#2}}
+\newcommand*\Waehrung[1]{\def\@waehrung{#1}}
+\newcommand*\Euro{\def\@waehrung{\texteuro}}
+\newcommand*\Gesamtsumme{\writeDM\@RCHsum}
+\newcommand*\Mehrwertsteuer{\writeDM\@RCHmwst}
+\newcommand*\@RCHwrite[1]{\@tempcnta\the#1\@tempcntb\@tempcnta
+  \divide\@tempcnta100 \the\@tempcnta,%
+  \multiply\@tempcnta100\advance\@tempcntb-\@tempcnta
+  \@tempcnta\@tempcntb\divide\@tempcnta10 \the\@tempcnta
+  \multiply\@tempcnta10\advance\@tempcntb-\@tempcnta
+  \the\@tempcntb}
+\newcommand*\writeDM[1]{\@RCHwrite{#1}\,\@waehrung}
+\newcommand*\writebfDM[1]{{\fontseries{b}\selectfont\@RCHwrite{#1}}%
+  \,\@waehrung}
+\newcommand*\@readDM[1]{\@RCHtmp=0\@readA#1\relax}
+\newcommand*\@readA[1]{%
+  \expandafter\if#1\relax\@tempcnta0\@readB\relax
+  \else\expandafter\if#1.\@tempcnta0
+  \expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\@readB
+  \else\expandafter\if#1,\@tempcnta0
+  \expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\@readB
+  \else\multiply\@RCHtmp10\advance\@RCHtmp#1
+  \expandafter\expandafter\expandafter\expandafter
+  \expandafter\expandafter\expandafter\@readA
+  \fi\fi\fi}
+\newcommand*\@readB[1]{%
+  \expandafter\if#1\relax\ifnum\@tempcnta=2
+  \else\@RCHtmp0\PackageError{rechnung}{Nicht exakt 2 Nachkommastellen}
+  \fi\else\advance\@tempcnta1
+  \multiply\@RCHtmp10\advance\@RCHtmp#1\expandafter\@readB
+  \fi}
+\newcommand*\@RCHsline[2]{%
+  \goodbreak\nointerlineskip
+  \vbox{\hrule
+    \hbox to\textwidth{%
+      \strut\vrule\hskip\tabcolsep #1\hfil\hskip\tabcolsep
+      \vrule\hskip\tabcolsep\hbox to 6.1em{\hfil#2}%
+      \hskip\tabcolsep\vrule}%
+    \hrule\vskip-0.4pt}}
+\newcommand*\@RCHohne{
+  \@RCHsline{Gesamtsumme}{\writebfDM\@RCHsum}}
+\newcommand*\@RCHnetto{
+  \@RCHsline{Nettosumme}{\writeDM\@RCHsum}%
+  \multiply\@RCHmwsti\@RCHstsi
+  \advance\@RCHmwsti50\divide\@RCHmwsti100
+  \multiply\@RCHmwstii\@RCHstsii
+  \advance\@RCHmwstii50\divide\@RCHmwstii100
+  \@RCHmwst\@RCHmwsti\advance\@RCHmwst\@RCHmwstii
+  \@RCHsline{+ MwSt. \if@RCHerm\@RCHstsii\% oder \@RCHstsi\%\else
+    \@RCHstsi\%\fi}{\writeDM\@RCHmwst}%
+  \advance\@RCHsum\@RCHmwst
+  \hrule
+  \vskip\doublerulesep\vskip0.4pt
+  \@RCHsline{Gesamtsumme}{\writebfDM\@RCHsum}%
+  \if@RCHerm\nointerlineskip\vskip0.5ex
+  \hbox to \textwidth{\hfill\footnotesize\strut
+    $^*$ Artikel mit \@RCHstsii\% Mehrwertsteuer}\fi}
+\newcommand*\@RCHbrutto{
+  \@RCHsline{Gesamtsumme}{\writebfDM\@RCHsum}
+  \multiply\@RCHmwsti\@RCHstsi\multiply\@RCHmwsti2%
+  \@tempcnta100\advance\@tempcnta\@RCHstsi
+  \advance\@RCHmwsti\@tempcnta
+  \multiply\@tempcnta2%
+  \divide\@RCHmwsti\@tempcnta
+  \multiply\@RCHmwstii\@RCHstsii\multiply\@RCHmwstii2%
+  \@tempcnta100\advance\@tempcnta\@RCHstsii
+  \advance\@RCHmwstii\@tempcnta
+  \multiply\@tempcnta2%
+  \divide\@RCHmwstii\@tempcnta
+  \@RCHmwst\@RCHmwsti\advance\@RCHmwst\@RCHmwstii
+  \@RCHsline{darin enthaltene Mehrwertsteuer}{\writeDM\@RCHmwst}%
+  \if@RCHerm\nointerlineskip\vskip0.5ex%
+  \hbox to \textwidth{\hfill\footnotesize\strut
+    $^*$ Artikel mit \@RCHstsii\% Mehrwertsteuer}\fi}
+\newcommand*\@RCHline[5]{{\goodbreak\nointerlineskip
+    \vbox{\hrule
+      \hbox to\textwidth{%
+        \vrule\hskip\tabcolsep
+        \hbox to 1.5em{\hfil #1\strut}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \hbox to 2em{\hfil #2}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \vtop{\normalbaselines\noindent
+          \rightskip=0pt plus1cm\hsize\@RCHwdt\linewidth\hsize
+        #3\null\strut\par}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \hbox to 3.8em{\hfil #4}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \hbox to 6.1em{\hfil #5}%
+        \hskip\tabcolsep\vrule}}
+    \hrule
+    \vskip-0.4pt}}
+\newcommand*\@Artikel[4][X]{
+  \advance\@RCHcnt1%
+  \@readDM{#4}\multiply\@RCHtmp#2\advance\@RCHsum\@RCHtmp
+  \@RCHline{\the\@RCHcnt}{#2}{#3}{#4}{\writeDM\@RCHtmp
+    \expandafter\ifx#1X\else\rlap{$^*$}\fi}
+  \expandafter\ifx#1X
+  \advance\@RCHmwsti\@RCHtmp
+  \else\advance\@RCHmwstii\@RCHtmp\global\@RCHermtrue\fi}
+\newcommand*\@Versandkosten[2][X]{\@readDM{#2}%
+  \advance\@RCHsum\@RCHtmp
+  \@RCHline{\null}{1}{Versandkosten}{#2}{\writeDM\@RCHtmp}%
+  \expandafter\ifx#1X
+  \advance\@RCHmwsti\@RCHtmp
+  \else\advance\@RCHmwstii\@RCHtmp\@RCHermtrue\fi}
+\newenvironment*{Rechnung}[1][X]{%
+  \@RCHermfalse\@RCHmwsti0\@RCHmwstii0\def\@RCHtype{#1}%
+  \let\Artikel\@Artikel
+  \let\Versandkosten\@Versandkosten
+  \@RCHcnt0\@RCHsum0
+  \@RCHwdt\textwidth\advance\@RCHwdt-13.4em
+  \advance\@RCHwdt-2.4pt\advance\@RCHwdt-10\tabcolsep
+  \vskip\abovedisplayskip
+  \@RCHline{\scriptsize Pos.\hfill}{\scriptsize Anz.\hfill}%
+  {\scriptsize Artikel\hfill}{\scriptsize EPreis\hfill}%
+  {\scriptsize Preis\hfill}}{%
+  \hrule
+  \vskip\doublerulesep\vskip0.4pt
+  \expandafter\if\@RCHtype X \@RCHohne
+  \else\expandafter\if\@RCHtype N \@RCHnetto
+  \else\expandafter\if\@RCHtype B \@RCHbrutto
+  \else\PackageError{rechnung}{Unbekannter Rechnungstyp `\@RCHtype'}%
+  \fi\fi\fi
+  \global\@RCHsum\@RCHsum\global\@RCHmwst\@RCHmwst
+  \vskip\belowdisplayskip}
+\newcommand*\@RCHlineX[6]{{\goodbreak\nointerlineskip
+    \vbox{\hrule
+      \hbox to\textwidth{%
+        \vrule\hskip\tabcolsep
+        \hbox to 1.5em{\hfil #1\strut}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \hbox to 2em{\hfil #2}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \hbox to 5em{\hfil #3}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \vtop{\normalbaselines\noindent
+          \rightskip=0pt plus1cm\hsize\@RCHwdt\linewidth\hsize
+         #4\null\strut\par}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \hbox to 3.8em{\hfil #5}%
+        \hskip\tabcolsep\vrule\hskip\tabcolsep
+        \hbox to 6.1em{\hfil #6}%
+        \hskip\tabcolsep\vrule}}
+    \hrule
+    \vskip-0.4pt}}
+\newcommand*\@ArtikelX[5][X]{
+  \advance\@RCHcnt1%
+  \@readDM{#5}\multiply\@RCHtmp#2\global\advance\@RCHsum\@RCHtmp
+  \@RCHlineX{\the\@RCHcnt}{#2}{#3}{#4}{#5}{\writeDM\@RCHtmp
+    \expandafter\ifx#1X\else\rlap{$^*$}\fi}
+  \expandafter\ifx#1X
+  \advance\@RCHmwsti\@RCHtmp
+  \else\advance\@RCHmwstii\@RCHtmp\global\@RCHermtrue\fi}
+\newcommand*\@VersandkostenX[2][X]{\@readDM{#2}
+  \advance\@RCHsum\@RCHtmp
+  \@RCHlineX{\null}{1}{\null}{Versandkosten}{#2}{\writeDM\@RCHtmp}%
+  \expandafter\ifx#1X
+  \advance\@RCHmwsti\@RCHtmp
+  \else\advance\@RCHmwstii\@RCHtmp\@RCHermtrue\fi}
+\newenvironment*{Rechnung*}[1][X]{%
+  \@RCHermfalse\@RCHmwsti0\@RCHmwstii0\def\@RCHtype{#1}%
+  \let\Artikel\@ArtikelX
+  \let\Versandkosten\@VersandkostenX
+  \@RCHcnt0\@RCHsum0
+  \@RCHwdt\textwidth\advance\@RCHwdt-18.4em
+  \advance\@RCHwdt-2.8pt\advance\@RCHwdt-12\tabcolsep
+  \vskip\abovedisplayskip
+  \@RCHlineX{\scriptsize Pos.\hfill}{\scriptsize Anz.\hfill}%
+  {\scriptsize Art.\,Nr.\hfill}%
+  {\scriptsize Artikel\hfill}{\scriptsize EPreis\hfill}%
+  {\scriptsize Preis\hfill}}{%
+  \hrule
+  \vskip\doublerulesep\vskip0.4pt
+  \expandafter\if\@RCHtype X \@RCHohne
+  \else\expandafter\if\@RCHtype N \@RCHnetto
+  \else\expandafter\if\@RCHtype B \@RCHbrutto
+  \else\PackageError{rechnung}{Unbekannter Rechnungstyp `\@RCHtype'}%
+  \fi\fi\fi
+  \global\@RCHsum\@RCHsum\global\@RCHmwst\@RCHmwst
+  \vskip\belowdisplayskip}
+\endinput
+%%
+%% End of file `rechnung.sty'.

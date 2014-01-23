@@ -1,0 +1,6 @@
+\ProvidesPackage{xeonlab-utilities}
+
+\newcommand{\newobject}[1]{%
+	\expandafter\gdef\csname #1\endcsname.##1: ##2;{\expandafter\gdef\csname XeonlabObj@#1@##1\endcsname{##2}}
+	\expandafter\gdef\csname read#1\endcsname[##1]{\csname XeonlabObj@#1@##1\endcsname}
+}
