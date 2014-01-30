@@ -1,6 +1,52 @@
 \ProvidesPackage{xeonlab-utilities}
 
+\def\Xeonlab@error#1#2{%
+  \begingroup
+    \errhelp{Xeonlab Error Help:^^J=================^^J#2^^J}%
+    \errmessage{Xeonlab Error: #1}
+  \endgroup
+} % of \Xeonlab@error
+
+\newcommand{\errorifundefined}[2]{
+	\ifcsname#1\endcsname%
+	\else%
+    		\Xeonlab@error{#2}\@ehc
+ 	\fi%
+} % of \errorifundefined
+
+\def\ifobject#1{
+	\ifcsname XeonlabObj@#1\endcsname%
+} % of \ifobject
+
+\newcommand{\ensureobject}[1]{
+	\ifobject{#1}%
+	\else%
+    		\Xeonlab@error{The object `#1` does not exist}{%
+    			You tried to use an object called `#1`, but unfortunately this object has not been created yet. Make sure to call `\newobject{#1}` before using it.}
+ 	\fi%
+} % of \ensureobject
+
 \newcommand{\newobject}[1]{%
+	% Set an identity
+	\expandafter\gdef\csname XeonlabObj@#1\endcsname{<Object #1>}
+	
+	% Define the setter
 	\expandafter\gdef\csname #1\endcsname.##1: ##2;{\expandafter\gdef\csname XeonlabObj@#1@##1\endcsname{##2}}
-	\expandafter\gdef\csname read#1\endcsname[##1]{\csname XeonlabObj@#1@##1\endcsname}
-}
+	
+	% Define the getter 
+	\expandafter\gdef\csname read#1\endcsname[##1]{%
+		\errorifundefined{XeonlabObj@#1@##1}{The object `#1` has no property `##1`}%
+		\csname XeonlabObj@#1@##1\endcsname
+	} % of \readobj[key]
+} % of \newobject
+
+%% CALENDAR
+%%===============================================
+\newobject{calendar}
+\calendar.year: \number\year;
+\calendar.month: \number\month;
+\calendar.day: \number\day;
+\calendar.time: \number\time;
+\calendar.monthName: \month@ngerman;
+
+\endinput
