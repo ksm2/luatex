@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{xeonlab-invoice}
+\ProvidesClass{xeonlab-letter}
 
 %% OPTIONS
 %%===============================================
@@ -8,8 +8,8 @@
 \RequirePackage{kvoptions-patch}
 
 \SetupKeyvalOptions{
-	family=XeonlabInvoice,
-	prefix=XeonlabInvoice@
+	family=XeonlabLetter,
+	prefix=XeonlabLetter@
 }
 
 \DeclareStringOption[000000]{brand}
@@ -28,14 +28,13 @@
 
 %% OBJECTS
 %%===============================================
-\newobject{invoice}
+\newobject{this}
 \newobject{from}
 \newobject{to}
-\newobject{bank}
 
 %% DEFINITIONS
 %%===============================================
-\definecolor{brand}{HTML}{\XeonlabInvoice@brand}
+\definecolor{brand}{HTML}{\XeonlabLetter@brand}
 \newcommand{\textbrand}[1]{\textcolor{brand}{#1}}
 
 \newcommand{\infoblock}[3]{%
@@ -45,7 +44,7 @@
 		#3
 	\end{textblock*}}
 
-\setkomavar{subject}{\textbrand{Rechnung \readinvoice[number]}}
+\setkomavar{subject}{\readthis[subject]}
 \setkomavar{signature}{\readfrom[signature]} 
 
 \date{}
@@ -56,7 +55,7 @@
 	\begin{textblock*}{85mm}(20mm,50mm)
 		\noindent
 		{\sffamily\scriptsize%
-			\textbf{\textbrand{\readfrom[name]}} $\cdot$
+			\textbrand{\readfrom[name]} $\cdot$
 			\readfrom[address] $\cdot$
 			\readfrom[zipcode]~\readfrom[city]}\\[-3mm]
 		\setlength{\unitlength}{1mm}
@@ -81,13 +80,7 @@
 	\begin{textblock*}{60mm}(125mm,106mm)
 		\noindent
 		\textbrand{\footnotesize Datum}\\
-		\readinvoice[created]
-	\end{textblock*}
-	% Due Date
-	\begin{textblock*}{60mm}(155mm,106mm)
-		\noindent
-		\textbrand{\footnotesize Fällig bis}\\
-		\readinvoice[due]
+		\readthis[created]
 	\end{textblock*}
 	% Bottom left details
 	\begin{textblock*}{60mm}(25mm,260mm)
@@ -97,21 +90,16 @@
 		Steuernummer \readfrom[tax] \\
 		\readfrom[website]
 	\end{textblock*}
-	% Bottom right bank details
-	\begin{textblock*}{60mm}(125mm,260mm)
-		\noindent
-		\textbrand{Bankverbindung} \\
-		\readbank[iban] \\
-		\readbank[bic] $\cdot$ \readbank[name] \\
-		Konto~\readbank[account] $\cdot$ BLZ~\readbank[code]
-	\end{textblock*}
 	\begin{letter}{%
-		\textbf{\textbrand{\readto[name]}}\\%
-		\readto[address]\\[6pt]%
+		\textbf{\readto[name]}\\%
+		\hasto[additional]{%
+		\readto[additional]\\}{}%
+		\hasto[address]{
+		\readto[address]\\[6pt]}{}%
 		\readto[zipcode]~\readto[city]%
 	}
 	
-	\ifXeonlabInvoice@foldmarks
+	\ifXeonlabLetter@foldmarks
 		\begin{textblock*}{297mm}(0mm,0mm)
 			\setlength{\unitlength}{1mm}
 			\linethickness{.4mm}
@@ -124,11 +112,11 @@
 			\end{picture}
 		\end{textblock*}
 	\fi
-	\opening{Sehr geehrte Damen und Herren,}
+	\opening{\readthis[opening]}
 }
 
 \AtEndDocument{
 
-	\closing{Mit freundlichen Grüßen}
+	\closing{\readthis[closing]}
 	\end{letter}
 }

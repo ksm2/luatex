@@ -33,6 +33,7 @@
 \RequirePackage{tikz}
 \RequirePackage{nameref}
 \RequirePackage{titlesec}
+\RequirePackage{titletoc}
 \RequirePackage{longtable}
 
 %% OBJECTS
@@ -58,6 +59,7 @@
 \geometry{bindingoffset=0mm}
 \setlength{\parindent}{5mm}
 \setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.4}
 
 \newcounter{year}
 \setcounter{year}{\number\year}
@@ -105,5 +107,10 @@
 \titleformat{\section}[hang]{\Large\sffamily\color{brand}}{\thesection\quad}{0pt}{}
 \titleformat{\subsection}[hang]{\large\itshape}{\thesubsection\quad}{0pt}{}
 \titleformat{\subsubsection}[hang]{\large}{\thesubsection\quad}{0pt}{}
+\def\tocindent{15mm}
+\titlecontents{section}[\tocindent]{\bfseries}{\noindent\contentslabel{\tocindent}}%
+	{\hspace*{0cm}}{\hfill\contentspage}
+\titlecontents{subsection}[\tocindent]{}{\noindent\contentslabel{\tocindent}}%
+	{\hspace*{0cm}}{\hfill\contentspage}
 
 \endinput

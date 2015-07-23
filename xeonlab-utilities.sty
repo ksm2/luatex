@@ -7,14 +7,14 @@
   \endgroup
 } % of \Xeonlab@error
 
-\newcommand{\errorifundefined}[2]{
+\newcommand{\errorifundefined}[2]{%
 	\ifcsname#1\endcsname%
 	\else%
-    		\Xeonlab@error{#2}\@ehc
- 	\fi%
+		\Xeonlab@error{#2}\@ehc%
+	\fi%
 } % of \errorifundefined
 
-\def\ifobject#1{
+\def\ifobject#1{%
 	\ifcsname XeonlabObj@#1\endcsname%
 } % of \ifobject
 
@@ -36,8 +36,18 @@
 	% Define the getter 
 	\expandafter\gdef\csname read#1\endcsname[##1]{%
 		\errorifundefined{XeonlabObj@#1@##1}{The object `#1` has no property `##1`}%
-		\csname XeonlabObj@#1@##1\endcsname
+		\csname XeonlabObj@#1@##1\endcsname%
 	} % of \readobj[key]
+	
+	
+	% Define the has property 
+	\expandafter\gdef\csname has#1\endcsname[##1]##2##3{%
+		\ifcsname XeonlabObj@#1@##1\endcsname%
+			##2%
+		\else%
+			##3%
+		\fi%
+	} % of \hasobj[key]
 } % of \newobject
 
 %% CALENDAR
